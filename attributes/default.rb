@@ -78,7 +78,7 @@ else
   default['gitlab']['url'] = "http://localhost:80/"
   default['gitlab']['port'] = "80"
   default['gitlab']['ssh_port'] = "22"
-  default['gitlab']['shell_revision'] = "v2.0.0"
+  default['gitlab']['shell_revision'] = "v2.0.1"
 end
 
 # Nginx ip
