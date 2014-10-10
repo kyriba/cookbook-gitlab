@@ -1,5 +1,4 @@
-# This cookbook is being deprecated in favor of [cookbook-omibus-gitlab](https://gitlab.com/gitlab-org/cookbook-omnibus-gitlab)
-and package installations
+# This cookbook is being deprecated in favor of [cookbook-omibus-gitlab](https://gitlab.com/gitlab-org/cookbook-omnibus-gitlab) and package installations
 
 GitLab Cookbook
 ===============
