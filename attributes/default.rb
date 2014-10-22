@@ -74,7 +74,7 @@ if node['gitlab']['env'] == "development"
   default['gitlab']['shell_revision'] = "master"
 else
   default['gitlab']['environments'] = %w{production}
-  default['gitlab']['revision'] = "7-3-stable" # Must be branch, otherwise GitLab update will run on each chef run
+  default['gitlab']['revision'] = "7-4-stable" # Must be branch, otherwise GitLab update will run on each chef run
   default['gitlab']['url'] = "http://localhost:80/"
   default['gitlab']['port'] = "80"
   default['gitlab']['ssh_port'] = "22"
@@ -116,6 +116,12 @@ default['gitlab']['ldap']['method'] = "ssl"
 default['gitlab']['ldap']['bind_dn'] = "_the_full_dn_of_the_user_you_will_bind_with"
 default['gitlab']['ldap']['password'] = "_the_password_of_the_bind_user"
 default['gitlab']['ldap']['allow_username_or_email_login'] = true
+
+# Supply hash of one or more LDAP servers, eg:
+# { main => {"label"=>"ldap","host"=>"127.0.0.1","port":3890,"uid"=>"uid","method"=>"plain","base"=>"dc=example,dc=com","user_filter"=>"","group_base"=>"ou=groups,dc=example,dc=com","admin_group"=>"","sync_ssh_keys":false},
+#  secondary => {"label"=>"ldap","host"=>"127.0.0.1","port":3890,"uid"=>"uid","method"=>"plain","base"=>"dc=example,dc=com","user_filter"=>"","group_base"=>"ou=groups,dc=example,dc=com","admin_group"=>"","sync_ssh_keys":false}
+# }
+default['gitlab']['ldap_servers'] = {}
 
 # LDAP Filter Example: Recursive query of group membership
 # default['gitlab']['ldap']['user_filter'] = '(&(objectcategory=person)(objectclass=user)(memberOf:1.2.840.113556.1.4.1941:=CN=Gitlab Users,OU=USA,DC=int,DC=contoso,DC=com))'

@@ -15,7 +15,7 @@ describe "gitlab::clone" do
       it "clones the gitlab repository" do
         expect(chef_run).to sync_git('/home/git/gitlab').with(
           repository: 'https://github.com/gitlabhq/gitlabhq.git',
-          revision: '7-3-stable',
+          revision: '7-4-stable',
           user: 'git',
           group: 'git'
         )
@@ -49,7 +49,7 @@ describe "gitlab::clone" do
         it "clones the gitlab repository" do
           expect(chef_run).to sync_git('/data/git/gitlab').with(
             repository: 'https://github.com/gitlabhq/gitlabhq.git',
-            revision: '7-3-stable',
+            revision: '7-4-stable',
             user: 'git',
             group: 'git'
           )
@@ -69,7 +69,7 @@ describe "gitlab::clone" do
       it "clones the gitlab repository" do
         expect(chef_run).to sync_git('/home/git/gitlab').with(
           repository: 'https://github.com/gitlabhq/gitlabhq.git',
-          revision: '7-3-stable',
+          revision: '7-4-stable',
           user: 'git',
           group: 'git'
         )
@@ -103,7 +103,7 @@ describe "gitlab::clone" do
         it "clones the gitlab repository" do
           expect(chef_run).to sync_git('/data/git/gitlab').with(
             repository: 'https://github.com/gitlabhq/gitlabhq.git',
-            revision: '7-3-stable',
+            revision: '7-4-stable',
             user: 'git',
             group: 'git'
           )

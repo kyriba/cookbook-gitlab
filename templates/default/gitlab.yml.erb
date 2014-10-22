@@ -132,63 +132,69 @@ production: &base
   #   bundle exec rake gitlab:ldap:check RAILS_ENV=production
   ldap:
     enabled: <%= @ldap_config["enabled"] %>
-    host: '<%= @ldap_config["host"] %>'
-    port: <%= @ldap_config["port"] %>
-    uid: '<%= @ldap_config["uid"] %>'
-    method: '<%= @ldap_config["method"] %>' # "ssl" or "plain"
-    bind_dn: '<%= @ldap_config["bind_dn"] %>'
-    password: '<%= @ldap_config["password"] %>'
+    <% if @ldap_servers.any? %>
+      <% @ldap_servers.each do |provider_id, settings| %>
+        <%= provider_id %>: <%= settings.to_json %>
+      <% end %>
+    <% else %>
+      host: '<%= @ldap_config["host"] %>'
+      port: <%= @ldap_config["port"] %>
+      uid: '<%= @ldap_config["uid"] %>'
+      method: '<%= @ldap_config["method"] %>' # "ssl" or "plain"
+      bind_dn: '<%= @ldap_config["bind_dn"] %>'
+      password: '<%= @ldap_config["password"] %>'
 
-    # This setting controls the amount of time between LDAP permission checks for each user.
-    # After this time has expired for a given user, their next interaction with GitLab (a click in the web UI, a git pull etc.) will be slower because the LDAP permission check is being performed.
-    # How much slower depends on your LDAP setup, but it is not uncommon for this check to add seconds of waiting time.
-    # The default value is to have a 'slow click' once every 3600 seconds, i.e. once per hour.
-    #
-    # Warning: if you set this value too low, every click in GitLab will be a 'slow click' for all of your LDAP users.
-    sync_time: <%= @ldap_config["sync_time"] %>
+      # This setting controls the amount of time between LDAP permission checks for each user.
+      # After this time has expired for a given user, their next interaction with GitLab (a click in the web UI, a git pull etc.) will be slower because the LDAP permission check is being performed.
+      # How much slower depends on your LDAP setup, but it is not uncommon for this check to add seconds of waiting time.
+      # The default value is to have a 'slow click' once every 3600 seconds, i.e. once per hour.
+      #
+      # Warning: if you set this value too low, every click in GitLab will be a 'slow click' for all of your LDAP users.
+      sync_time: <%= @ldap_config["sync_time"] %>
 
-    # If allow_username_or_email_login is enabled, GitLab will ignore everything
-    # after the first '@' in the LDAP username submitted by the user on login.
-    #
-    # Example:
-    # - the user enters 'jane.doe@example.com' and 'p@ssw0rd' as LDAP credentials;
-    # - GitLab queries the LDAP server with 'jane.doe' and 'p@ssw0rd'.
-    #
-    # If you are using "uid: 'userPrincipalName'" on ActiveDirectory you need to
-    # disable this setting, because the userPrincipalName contains an '@'.
-    allow_username_or_email_login: <%= @ldap_config["allow_username_or_email_login"] %>
+      # If allow_username_or_email_login is enabled, GitLab will ignore everything
+      # after the first '@' in the LDAP username submitted by the user on login.
+      #
+      # Example:
+      # - the user enters 'jane.doe@example.com' and 'p@ssw0rd' as LDAP credentials;
+      # - GitLab queries the LDAP server with 'jane.doe' and 'p@ssw0rd'.
+      #
+      # If you are using "uid: 'userPrincipalName'" on ActiveDirectory you need to
+      # disable this setting, because the userPrincipalName contains an '@'.
+      allow_username_or_email_login: <%= @ldap_config["allow_username_or_email_login"] %>
 
-    # Base where we can search for users
-    #
-    #   Ex. ou=People,dc=gitlab,dc=example
-    #
-    base: '<%= @ldap_config["base"] %>'
+      # Base where we can search for users
+      #
+      #   Ex. ou=People,dc=gitlab,dc=example
+      #
+      base: '<%= @ldap_config["base"] %>'
 
-    # Filter LDAP users
-    #
-    #   Format: RFC 4515
-    #   Ex. (employeeType=developer)
-    #
-    user_filter: '<%= @ldap_config["user_filter"] %>'
+      # Filter LDAP users
+      #
+      #   Format: RFC 4515
+      #   Ex. (employeeType=developer)
+      #
+      user_filter: '<%= @ldap_config["user_filter"] %>'
 
-    # Base where we can search for groups
-    #
-    #   Ex. ou=Groups,dc=gitlab,dc=example
-    #
-    group_base: <%= @ldap_config['group_base'] %>
+      # Base where we can search for groups
+      #
+      #   Ex. ou=Groups,dc=gitlab,dc=example
+      #
+      group_base: <%= @ldap_config['group_base'] %>
 
-    # LDAP group of users who should be admins in GitLab
-    #
-    #   Ex. GLAdmins
-    #
-    admin_group: <%= @ldap_config['admin_group'] %>
+      # LDAP group of users who should be admins in GitLab
+      #
+      #   Ex. GLAdmins
+      #
+      admin_group: <%= @ldap_config['admin_group'] %>
 
-    # Name of attribute which holds a ssh public key of the user object.
-    # If false or nil, SSH key syncronisation will be disabled.
-    #
-    #   Ex. sshpublickey
-    #
-    sync_ssh_keys: <%= @ldap_config['sync_ssh_keys'] %>
+      # Name of attribute which holds a ssh public key of the user object.
+      # If false or nil, SSH key syncronisation will be disabled.
+      #
+      #   Ex. sshpublickey
+      #
+      sync_ssh_keys: <%= @ldap_config['sync_ssh_keys'] %>
+    <% end %>
 
   ## OmniAuth settings
   omniauth:

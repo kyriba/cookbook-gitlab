@@ -41,6 +41,7 @@ template File.join(gitlab['path'], 'config', 'gitlab.yml') do
     :gravatar_plain_url => gitlab['gravatar_plain_url'],
     :gravatar_ssl_url => gitlab['gravatar_ssl_url'],
     :ldap_config => gitlab['ldap'],
+    :ldap_servers => gitlab['ldap_servers'],
     :ssh_port => gitlab['ssh_port'],
     :backup => gitlab['backup'],
   })
