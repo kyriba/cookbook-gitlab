@@ -301,3 +301,5 @@ default['gitlab']['backup']['cron']['mailto'] = 'gitlab@localhost'
 default['gitlab']['backup']['cron']['path'] = '/usr/local/bin:/usr/bin:/bin'
 default['gitlab']['backup']['backup_keep_time'] = 0
 default['gitlab']['backup']['backup_path'] = 'tmp/backups'
+
+include_attribute 'omnibus-gitlab'
