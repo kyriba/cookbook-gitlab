@@ -68,6 +68,7 @@ describe "gitlab::install" do
               "sync_ssh_keys"=>false,
               "sync_time"=>3600
             },
+            ldap_servers: {},
             backup: {
               "enable"=>true,
               "cron"=>{
@@ -548,6 +549,7 @@ describe "gitlab::install" do
               "sync_ssh_keys"=>false,
               "sync_time"=>3600
             },
+            ldap_servers: {},
             backup: {
               "enable"=>true,
               "cron"=>{
