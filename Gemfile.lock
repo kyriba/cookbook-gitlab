@@ -62,7 +62,7 @@ GEM
       httparty
       net-ssh
       ohai
-    ffi (1.9.3)
+    ffi (1.11.1)
     foodcritic (0.2.0)
     hashie (2.1.1)
     highline (1.6.20)
