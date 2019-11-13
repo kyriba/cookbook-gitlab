@@ -25,6 +25,7 @@ template path do
     :ssl_certificate_key_path => gitlab['ssl_certificate_key_path'],
     :client_max_body_size => gitlab['client_max_body_size']
   })
+  notifies :reload, 'service[nginx]', :delayed
 end
 
 if platform_family?("rhel")
@@ -35,6 +36,7 @@ if platform_family?("rhel")
   %w( default.conf ssl.conf virtual.conf ).each do |conf|
     file "/etc/nginx/conf.d/#{conf}" do
       action :delete
+      notifies :reload, 'service[nginx]', :delayed
     end
   end
 else
@@ -44,16 +46,17 @@ else
 
   file "/etc/nginx/sites-enabled/default" do
     action :delete
+    notifies :reload, 'service[nginx]', :delayed
   end
 end
 
 if gitlab['port'] == "443"
-  directory "#{gitlab['ssl_certificate_path']}" do
+  directory gitlab['ssl_certificate_path'] do
     recursive true
     mode 0755
   end
 
-  directory "#{gitlab['ssl_certificate_key_path']}" do
+  directory gitlab['ssl_certificate_key_path'] do
     recursive true
     mode 0755
   end
@@ -61,19 +64,18 @@ if gitlab['port'] == "443"
   file "#{gitlab['ssl_certificate_path']}/#{gitlab['host']}.crt" do
     content gitlab['ssl_certificate']
     mode 0600
+    notifies :reload, 'service[nginx]', :delayed
   end
 
   file "#{gitlab['ssl_certificate_key_path']}/#{gitlab['host']}.key" do
     content gitlab['ssl_certificate_key']
     mode 0600
+    notifies :reload, 'service[nginx]', :delayed
   end
 end
-## Restart
 
-service "nginx" do
-  action :enable
-end
-
-service "nginx" do
-  action :restart
+# manage service
+service 'nginx' do
+  action [:enable, :start]
+  supports restart: true, reload: true, status: true
 end

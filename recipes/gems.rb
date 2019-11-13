@@ -21,10 +21,12 @@ remote_file "Fetch the latest ca-bundle" do
   group gitlab['group']
   mode 0755
   action :create
+  notifies :run, 'execute[Update rubygems]', :immediately
 end
 
-execute "Update rubygems" do
-  command "gem update --system"
+execute 'Update rubygems' do
+  command 'gem update --system'
+  action :nothing
 end
 
 ## Install Gems without ri and rdoc
@@ -54,6 +56,15 @@ else
   bundle_without << 'production'
 end
 
+bundle_cfg = ::File.join(gitlab['path'], '.bundle/config')
+
+execute 'bundle mirror config' do
+  command "bundle config --local mirror.https://rubygems.org #{gitlab['bundle_mirror']}"
+  cwd gitlab['path']
+  user gitlab['user']
+  not_if { ::File.exist?(bundle_cfg) && ::File.open(bundle_cfg).each_line.any? { |line| line =~ /#{gitlab['bundle_mirror']}/ } }
+end unless gitlab['bundle_mirror'].empty?
+
 execute "bundle install" do
   command <<-EOS
     PATH="#{gitlab['postgresql']['configuration_dir']}:/usr/local/bin:$PATH"
@@ -62,6 +73,5 @@ execute "bundle install" do
   cwd gitlab['path']
   user gitlab['user']
   group gitlab['group']
-  action File.exists?(File.join(gitlab['home'], "Gemfile.lock")) ? :nothing : :run
-  subscribes :run, "git[clone gitlabhq source]", :immediately
+  not_if { ::File.directory?(::File.join(gitlab['path'], '.bundle', 'ruby')) }
 end

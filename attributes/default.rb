@@ -104,6 +104,7 @@ default['gitlab']['default_projects_features']['visibility_level'] = "private"
 
 # Gems
 default['gitlab']['bundle_install'] = "SSL_CERT_FILE=/opt/local/etc/certs/cacert.pem bundle install --path=.bundle --deployment"
+default['gitlab']['bundle_mirror'] = ''
 
 # Databases
 # Assumed defaults
